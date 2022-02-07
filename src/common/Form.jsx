@@ -36,7 +36,6 @@ export default function Form({
   handleChange,
   handleRegister,
 }) {
-  // const { handleChange, handleSubmit, SignUp } = useContext(CurrentUserContext);
   function onFormSelect(e) {
     e.preventDefault();
     if (window.location.pathname === "/login") {

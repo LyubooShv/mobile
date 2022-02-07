@@ -9,7 +9,7 @@ import {api as registersApi} from "../api/carsBackend/registerApi";
 // **** TODO: IMPORT API
 import { LogInStart} from "../containers/LogIn/saga";
 import { CarsStart } from '../containers/Home/saga';
-import {RegisterStart} from "../common/Register/saga";
+import {RegisterStart} from "../containers/Register/saga"
 /** Root saga.
  * @return {Object} - return store
  */
