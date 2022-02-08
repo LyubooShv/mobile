@@ -2,12 +2,12 @@ import { put, call, take } from 'redux-saga/effects';
 import { RegisterTypes } from './types';
 import { registerSuccess, registerFail } from './action';
 
-export function* RegisterSaga(api,username, password){
+export function* RegisterSaga(api,username, password, firstName, lastName){
     try{
-        if(username, password){
-           const res = yield call(api.register,username, password)
+        if(username, password, firstName, lastName){
+           const res = yield call(api.register,username, password, firstName, lastName)
            yield put(registerSuccess(res))
-        console.log(res);
+        console.log(username, password, firstName, lastName);
         }
     }catch(error){
         yield put(registerFail(error))
@@ -20,9 +20,9 @@ export function* RegisterStart(api){
       const registerData = yield take(RegisterTypes.REGISTER_REQUEST)
       if(registerData.payload){
           console.log(registerData.payload);
-          const {username, password}= registerData.payload
-          yield call(RegisterSaga,api,username, password)
-          console.log(username,password);
+          const {username, password, firstName, lastName}= registerData.payload
+          yield call(RegisterSaga,api,username, password, firstName, lastName)
+          console.log(username,password, firstName, lastName);
       }
     }
 }
