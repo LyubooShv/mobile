@@ -1,4 +1,4 @@
-import { RegisterTypes } from "../common/Register/types";
+import { RegisterTypes } from "../containers/Register/types";
 
 const INITIAL_STATE = {
     user:null,
