@@ -55,19 +55,13 @@ const LogIn = () => {
     let error = inputValidation(email, password);
     Object.keys(error).length
       ? setErrorMassage(error)
-      : // : console.log(email, password);
-        dispatch(logInRequest(email, password));
-    console.log(requestError);
+      : dispatch(logInRequest(email, password));
   };
 
   const handleChange = (event) => {
     const { value, name } = event.target;
     setCredentials({ ...userCredentials, [name]: value });
   };
-
-  useEffect(() => {
-    dispatch(logInFail(null));
-  }, []);
 
   return (
     <ThemeProvider theme={theme}>
