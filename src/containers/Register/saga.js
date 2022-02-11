@@ -1,6 +1,6 @@
 import { put, call, take } from 'redux-saga/effects';
 import { RegisterTypes } from './types';
-import { registerSuccess, registerFail, registerRequest } from './action';
+import { registerSuccess, registerFail} from './action';
 import {redirect} from "../../components/CustomRedirect/actions"
 
 export function* RegisterSaga(api,username, password, firstName, lastName){

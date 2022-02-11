@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -16,7 +16,7 @@ import {
   Container,
 } from "@mui/material";
 
-import { logInFail, logInRequest } from "./action";
+import { logInRequest } from "./action";
 import { inputValidation } from "./loginValidation/validation";
 
 function Copyright(props) {
