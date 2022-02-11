@@ -20,7 +20,7 @@ const logInReducer = (state=INITIAL_STATE,action) => {
                     case LogInTypes.LOGOUT_SUCCESS:
                         return{
                             ...state,
-                            currentUser:null
+                            currentUser:null,                        
                         };
                         default:
                             return state

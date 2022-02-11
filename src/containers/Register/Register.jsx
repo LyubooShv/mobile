@@ -1,21 +1,23 @@
 import React, { useState } from "react";
-
-import { useDispatch } from "react-redux";
-import { registerRequest } from "./action";
-
 import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
 
-import Avatar from "@mui/material/Avatar";
-import Button from "@mui/material/Button";
-import CssBaseline from "@mui/material/CssBaseline";
-import TextField from "@mui/material/TextField";
-import Grid from "@mui/material/Grid";
-import Box from "@mui/material/Box";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
-import Typography from "@mui/material/Typography";
-import Container from "@mui/material/Container";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
+import {
+  createTheme,
+  ThemeProvider,
+  Avatar,
+  Button,
+  CssBaseline,
+  TextField,
+  Grid,
+  Box,
+  Typography,
+  Container,
+} from "@mui/material";
 
+import { registerRequest } from "./action";
+import { inputValidation } from "./registerValidation/validation";
 import "./register.scss";
 
 function Copyright(props) {
@@ -46,17 +48,20 @@ const Register = () => {
     lastName: "",
   });
 
+  const [errorMassage, setErrorMassage] = useState({});
+
   const { email, password, firstName, lastName } = userCredentials;
 
   const handleRegister = async (e) => {
     e.preventDefault();
-    console.log(email, password, firstName, lastName);
-    dispatch(registerRequest(email, password, firstName, lastName));
+    let error = inputValidation(userCredentials);
+    Object.keys(error).length
+      ? setErrorMassage(error)
+      : dispatch(registerRequest(email, password, firstName, lastName));
   };
 
   const handleChange = (event) => {
     const { value, name } = event.target;
-
     setCredentials({ ...userCredentials, [name]: value });
   };
 
@@ -85,6 +90,7 @@ const Register = () => {
             sx={{ mt: 1 }}
           >
             <Grid className="namesContainer">
+              <Typography>{errorMassage.firstNameError}</Typography>
               <TextField
                 margin="normal"
                 required
@@ -95,6 +101,7 @@ const Register = () => {
                 onChange={handleChange}
                 sx={{ mr: 2 }}
               />
+              <Typography>{errorMassage.lastNameError}</Typography>
               <TextField
                 margin="normal"
                 required
@@ -106,7 +113,7 @@ const Register = () => {
                 sx={{ ml: 2 }}
               />
             </Grid>
-
+            <Typography>{errorMassage.emailError}</Typography>
             <TextField
               margin="normal"
               required
@@ -118,6 +125,7 @@ const Register = () => {
               autoFocus
               onChange={handleChange}
             />
+            <Typography>{errorMassage.passwordError}</Typography>
             <TextField
               margin="normal"
               required

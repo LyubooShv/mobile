@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import {
@@ -16,7 +16,8 @@ import {
   Container,
 } from "@mui/material";
 
-import { logInRequest } from "./action";
+import { logInFail, logInRequest } from "./action";
+import { inputValidation } from "./loginValidation/validation";
 
 function Copyright(props) {
   return (
@@ -38,25 +39,35 @@ const theme = createTheme();
 
 const LogIn = () => {
   const dispatch = useDispatch();
+  const requestError = useSelector((state) => state.currentUser.error);
 
   const [userCredentials, setCredentials] = useState({
     email: "",
     password: "",
   });
 
+  const [errorMassage, setErrorMassage] = useState({});
+
   const { email, password } = userCredentials;
 
   const handleLogIn = async (e) => {
     e.preventDefault();
-
-    dispatch(logInRequest(email, password));
+    let error = inputValidation(email, password);
+    Object.keys(error).length
+      ? setErrorMassage(error)
+      : // : console.log(email, password);
+        dispatch(logInRequest(email, password));
+    console.log(requestError);
   };
 
   const handleChange = (event) => {
     const { value, name } = event.target;
-
     setCredentials({ ...userCredentials, [name]: value });
   };
+
+  useEffect(() => {
+    dispatch(logInFail(null));
+  }, []);
 
   return (
     <ThemeProvider theme={theme}>
@@ -82,6 +93,10 @@ const LogIn = () => {
             noValidate
             sx={{ mt: 1 }}
           >
+            <Typography>
+              {requestError && "The account does not exist!"}
+            </Typography>
+            <Typography>{errorMassage.emailError}</Typography>
             <TextField
               margin="normal"
               required
@@ -93,6 +108,7 @@ const LogIn = () => {
               autoFocus
               onChange={handleChange}
             />
+            <Typography>{errorMassage.passwordError}</Typography>
             <TextField
               margin="normal"
               required
