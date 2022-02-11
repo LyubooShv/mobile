@@ -39,7 +39,7 @@ const theme = createTheme();
 
 const LogIn = () => {
   const dispatch = useDispatch();
-  const requestError = useSelector((state) => state.currentUser.error);
+  const { error } = useSelector((state) => state.currentUser);
 
   const [userCredentials, setCredentials] = useState({
     email: "",
@@ -87,9 +87,7 @@ const LogIn = () => {
             noValidate
             sx={{ mt: 1 }}
           >
-            <Typography>
-              {requestError && "The account does not exist!"}
-            </Typography>
+            <Typography>{error && "The account does not exist!"}</Typography>
             <Typography>{errorMassage.emailError}</Typography>
             <TextField
               margin="normal"
