@@ -3,7 +3,7 @@ import { all } from 'redux-saga/effects';
 // **** TODO: IMPORT SAGA FILES
 import {api as logInApi} from "../api/carsBackend/logInApi";
 import {api as carsApi} from "../api/carsBackend/carsApi";
-import {api as registersApi} from "../api/carsBackend/registerApi";
+import {api as registerApi} from "../api/carsBackend/registerApi";
 
 // API
 // **** TODO: IMPORT API
@@ -17,7 +17,7 @@ function* rootSaga() {
   yield all([
     LogInStart(logInApi),
     CarsStart(carsApi),
-    RegisterStart(registersApi)
+    RegisterStart(registerApi)
   ]);
 }
 

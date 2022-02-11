@@ -1,10 +1,12 @@
 import { RegisterTypes } from "./types";
 
-export const registerRequest = (username,password) => ({
+export const registerRequest = (username,password,firstName,lastName) => ({
     type:RegisterTypes.REGISTER_REQUEST,
     payload:{
-        username:username,
-        password:password
+        username,
+        password,
+        firstName,
+        lastName
     }
 })
 export const registerSuccess = user => ({

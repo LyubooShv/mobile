@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import {
@@ -16,7 +16,8 @@ import {
   Container,
 } from "@mui/material";
 
-import { logInRequest } from "./action";
+import { logInFail, logInRequest } from "./action";
+import { inputValidation } from "./loginValidation/validation";
 
 function Copyright(props) {
   return (
@@ -38,23 +39,27 @@ const theme = createTheme();
 
 const LogIn = () => {
   const dispatch = useDispatch();
+  const { error } = useSelector((state) => state.currentUser);
 
   const [userCredentials, setCredentials] = useState({
     email: "",
     password: "",
   });
 
+  const [errorMassage, setErrorMassage] = useState({});
+
   const { email, password } = userCredentials;
 
   const handleLogIn = async (e) => {
     e.preventDefault();
-
-    dispatch(logInRequest(email, password));
+    let error = inputValidation(email, password);
+    Object.keys(error).length
+      ? setErrorMassage(error)
+      : dispatch(logInRequest(email, password));
   };
 
   const handleChange = (event) => {
     const { value, name } = event.target;
-
     setCredentials({ ...userCredentials, [name]: value });
   };
 
@@ -73,13 +78,17 @@ const LogIn = () => {
           <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
             <LockOutlinedIcon />
           </Avatar>
-          <Typography component="h1" variant="h5"></Typography>
+          <Typography component="h1" variant="h5">
+            Log In
+          </Typography>
           <Box
             component="form"
             onSubmit={handleLogIn}
             noValidate
             sx={{ mt: 1 }}
           >
+            <Typography>{error && "The account does not exist!"}</Typography>
+            <Typography>{errorMassage.emailError}</Typography>
             <TextField
               margin="normal"
               required
@@ -91,6 +100,7 @@ const LogIn = () => {
               autoFocus
               onChange={handleChange}
             />
+            <Typography>{errorMassage.passwordError}</Typography>
             <TextField
               margin="normal"
               required
