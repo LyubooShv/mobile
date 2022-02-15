@@ -3,7 +3,7 @@ import { LogInTypes } from './types';
 import { logInSuccess, logInFail } from './action';
 import {redirect} from "../../components/CustomRedirect/actions"
 
-export function* LogInSaga(api,username, password){
+export function* logInSaga(api,username, password){
     try{
         if(username, password){
            const res = yield call(api.login,username, password)
@@ -17,13 +17,13 @@ export function* LogInSaga(api,username, password){
 }
 
 
-export function* LogInStart(api){
+export function* logInStart(api){
     while(true){
       const logInData = yield take(LogInTypes.LOGIN_REQUEST)
       if(logInData.payload){
           console.log(logInData.payload);
           const {username, password}= logInData.payload
-          yield call(LogInSaga,api,username, password)
+          yield call(logInSaga,api,username, password)
           console.log(username,password);
       }
     }

@@ -2,22 +2,30 @@ import { all } from 'redux-saga/effects';
 // Saga
 // **** TODO: IMPORT SAGA FILES
 import {api as logInApi} from "../api/carsBackend/logInApi";
-import {api as carsApi} from "../api/carsBackend/carsApi";
 import {api as registerApi} from "../api/carsBackend/registerApi";
+import {api as getCarsApi} from "../api/carsBackend/getCarsApi";
+import {api as createCarApi} from "../api/carsBackend/createCarApi";
+import {api as removeCarApi} from "../api/carsBackend/removeCarApi"
+
 
 // API
 // **** TODO: IMPORT API
-import { LogInStart} from "../containers/LogIn/saga";
-import { CarsStart } from '../containers/Home/saga';
-import {RegisterStart} from "../containers/Register/saga"
+import { logInStart} from "../containers/LogIn/saga";
+import {registerStart} from "../containers/Register/saga";
+import { getCarsStart } from '../containers/Home/getCars.saga';
+import {createCarStart} from "../containers/Home/createCar.saga";
+import {removeCarStart} from "../containers/Home/removeCar.saga";
+
 /** Root saga.
  * @return {Object} - return store
  */
 function* rootSaga() {
   yield all([
-    LogInStart(logInApi),
-    CarsStart(carsApi),
-    RegisterStart(registerApi)
+    logInStart(logInApi),
+    getCarsStart(getCarsApi),
+    registerStart(registerApi),
+    createCarStart(createCarApi),
+    removeCarStart(removeCarApi)
   ]);
 }
 

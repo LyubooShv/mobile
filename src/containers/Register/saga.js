@@ -3,7 +3,7 @@ import { RegisterTypes } from './types';
 import { registerSuccess, registerFail} from './action';
 import {redirect} from "../../components/CustomRedirect/actions"
 
-export function* RegisterSaga(api,username, password, firstName, lastName){
+export function* registerSaga(api,username, password, firstName, lastName){
     try{
         if(username, password, firstName, lastName){
            const res = yield call(api.register, username, password, firstName, lastName);
@@ -16,12 +16,12 @@ export function* RegisterSaga(api,username, password, firstName, lastName){
 }
 
 
-export function* RegisterStart(api){
+export function* registerStart(api){
     while(true){
       const registerData = yield take(RegisterTypes.REGISTER_REQUEST)
       if(registerData.payload){
           const {username, password, firstName, lastName} = registerData.payload
-          yield call(RegisterSaga,api,username, password, firstName, lastName)
+          yield call(registerSaga,api,username, password, firstName, lastName)
       }
     }
 }

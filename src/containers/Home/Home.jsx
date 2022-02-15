@@ -1,17 +1,24 @@
 import React, { useState, useEffect } from "react";
-import MaterialTable from "material-table";
-import { tableTitleColumns } from "../../common/tableTitleColumns";
-import Header from "../../components/Header/Header";
 import { useDispatch, useSelector } from "react-redux";
-import { carsRequest } from "./action";
+import { isEmpty } from "lodash";
+import MaterialTable from "material-table";
+import Header from "../../components/Header/Header";
+import { tableTitleColumns } from "../../common/tableTitleColumns";
+import { getCarsRequest, createCarRequest, removeCarRequest } from "./action";
 
 export default function Home() {
   const dispatch = useDispatch();
   const cars = useSelector((state) => state.cars.cars.data);
+  const { user, jwtToken } = useSelector(
+    (state) => state.currentUser.currentUser.data
+  );
+
+  const [createdCar, setCreatedCar] = useState(cars);
 
   useEffect(() => {
-    dispatch(carsRequest());
-  }, []);
+    dispatch(getCarsRequest());
+    setCreatedCar(cars);
+  }, [isEmpty(cars)]);
 
   return (
     <div>
@@ -19,7 +26,7 @@ export default function Home() {
       <MaterialTable
         title="Simple Cars"
         columns={tableTitleColumns}
-        data={cars}
+        data={createdCar}
         options={{
           selection: true,
         }}
@@ -27,31 +34,33 @@ export default function Home() {
           onRowAdd: (newData) =>
             new Promise((resolve, reject) => {
               setTimeout(() => {
-                // setAddCars([...addCars, newData]);
-                console.log("addButton");
                 resolve();
+                setCreatedCar((prevState) => {
+                  const cars = [...prevState, newData];
+                  dispatch(createCarRequest(jwtToken, newData, user));
+                  return cars;
+                });
+                console.log("addButton:", createdCar, newData);
               }, 1000);
             }),
           onRowUpdate: (newData, oldData) =>
             new Promise((resolve, reject) => {
               setTimeout(() => {
-                // const dataUpdate = [...data];
-                // const index = oldData.tableData.id;
-                // dataUpdate[index] = newData;
-                // setData([...dataUpdate]);
-                console.log("editButton");
+                console.log("editButton:");
                 resolve();
               }, 1000);
             }),
           onRowDelete: (oldData) =>
             new Promise((resolve, reject) => {
               setTimeout(() => {
-                // const dataDelete = [...data];
-                // const index = oldData.tableData.id;
-                // dataDelete.splice(index, 1);
-                // setData([...dataDelete]);
-                console.log("deleteButton");
                 resolve();
+                setCreatedCar((prevState) => {
+                  const data = [...prevState];
+                  data.splice(data.indexOf(oldData), 1);
+                  dispatch(removeCarRequest(oldData.id, user.id, jwtToken));
+                  return data;
+                });
+                console.log("deleteButton:", user, jwtToken);
               }, 1000);
             }),
         }}

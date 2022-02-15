@@ -5,7 +5,7 @@ const INITIAL_STATE = {
     error:null
 }
 
-const carsReducer = (state=INITIAL_STATE,action) => {
+const getCarsReducer = (state=INITIAL_STATE,action) => {
     switch (action.type){
             case CarsTypes.GET_CARS_SUCCESS:
                 return{
@@ -21,4 +21,4 @@ const carsReducer = (state=INITIAL_STATE,action) => {
                             return state
     }
 }
-export default carsReducer
+export default getCarsReducer
