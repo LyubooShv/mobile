@@ -20,6 +20,7 @@ export function* createCarStart(api) {
 function* createCarSaga(api,token,data,user) {
   try {
     const response = yield call(api.createCar, token, data,user);
+    console.log(response);
     yield put(createCarSuccess(response.data));
   } catch (error) {
     yield put(createCarError(error));

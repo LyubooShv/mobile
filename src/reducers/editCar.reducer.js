@@ -4,15 +4,15 @@ export const initialState = {
   error: null,
 };
 
-function removeCarReducer(state = initialState, action) {
+function editCarReducer(state = initialState, action) {
   switch (action.type) {
-    case CarsTypes.REMOVE_CAR_SUCCESS:
+    case CarsTypes.EDIT_CAR_SUCCESS:
       return {
         ...state,
         message: "",
       };
 
-    case CarsTypes.REMOVE_CAR_ERROR:
+    case CarsTypes.EDIT_CAR_ERROR:
       return {
         ...state,
         error: action.payload,
@@ -23,4 +23,4 @@ function removeCarReducer(state = initialState, action) {
   }
 }
 
-export default removeCarReducer;
+export default editCarReducer;

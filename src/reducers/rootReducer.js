@@ -5,6 +5,7 @@ import getCarsReducer from "./getCars.reducer";
 import registerReducer from "./register.reducer";
 import createCarReducer from "./createCar.reducer";
 import removeCarReducer from "./removeCar.reducer";
+import editCarReducer from "./editCar.reducer";
 
 // TODO:Import reducers
 
@@ -19,6 +20,7 @@ export default function createReducer() {
     cars: getCarsReducer,
     createdCar: createCarReducer,
     removeCar: removeCarReducer,
+    editCar:editCarReducer,
     user: registerReducer,
   });
   return rootReducer;

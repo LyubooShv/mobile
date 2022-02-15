@@ -1,12 +1,13 @@
 import React from "react";
 import Button from "@mui/material/Button";
 import { useDispatch, useSelector } from "react-redux";
-import { selectCurrentUser } from "./user.selector";
 import { logOutSuccess } from "../../containers/LogIn/action";
 import { redirect } from "../CustomRedirect/actions";
 
-const Header = () => {
-  const currentUser = useSelector(selectCurrentUser);
+const Header = (user) => {
+  const { username } = useSelector(
+    (state) => state.currentUser.currentUser.data.user
+  );
   const dispatch = useDispatch();
 
   const logOut = () => {
@@ -17,7 +18,7 @@ const Header = () => {
     <div>
       <h2>Simple Cars</h2>
       <Button onClick={logOut}>LogOut</Button>
-      <div>{currentUser && currentUser.data.user.username}</div>
+      <div>{username && username}</div>
     </div>
   );
 };

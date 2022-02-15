@@ -4,7 +4,12 @@ import { isEmpty } from "lodash";
 import MaterialTable from "material-table";
 import Header from "../../components/Header/Header";
 import { tableTitleColumns } from "../../common/tableTitleColumns";
-import { getCarsRequest, createCarRequest, removeCarRequest } from "./action";
+import {
+  getCarsRequest,
+  createCarRequest,
+  removeCarRequest,
+  editCarRequest,
+} from "./action";
 
 export default function Home() {
   const dispatch = useDispatch();
@@ -40,16 +45,22 @@ export default function Home() {
                   dispatch(createCarRequest(jwtToken, newData, user));
                   return cars;
                 });
-                console.log("addButton:", createdCar, newData);
               }, 1000);
             }),
+          isEditHidden: (row) => row.user.username !== user.username,
           onRowUpdate: (newData, oldData) =>
             new Promise((resolve, reject) => {
               setTimeout(() => {
-                console.log("editButton:");
                 resolve();
+                setCreatedCar((prevState) => {
+                  const data = [...prevState];
+                  data.splice(data.indexOf(oldData), 1, newData);
+                  dispatch(editCarRequest(jwtToken, user, newData));
+                  return data;
+                });
               }, 1000);
             }),
+          isDeleteHidden: (row) => row.user.username !== user.username,
           onRowDelete: (oldData) =>
             new Promise((resolve, reject) => {
               setTimeout(() => {
@@ -60,7 +71,6 @@ export default function Home() {
                   dispatch(removeCarRequest(oldData.id, user.id, jwtToken));
                   return data;
                 });
-                console.log("deleteButton:", user, jwtToken);
               }, 1000);
             }),
         }}
