@@ -16,9 +16,9 @@ export default function Home() {
   const [createdCar, setCreatedCar] = useState(cars);
 
   useEffect(() => {
-    dispatch(getCarsRequest());
+    isEmpty(cars) && dispatch(getCarsRequest());
     setCreatedCar(cars);
-  }, [isEmpty(cars)]);
+  }, [cars]);
 
   return (
     <div>
