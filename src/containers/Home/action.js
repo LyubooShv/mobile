@@ -59,18 +59,42 @@ export function removeCarRequest(carId, userId, token) {
   };
 }
 
-export function removeCarSuccess(error) {
+export function removeCarSuccess(message) {
   return {
     type: CarsTypes.REMOVE_CAR_SUCCESS,
-    payload: {
-      error,
-    },
+    payload: message,
   };
 }
 
 export function removeCarError(error) {
   return {
     type: CarsTypes.REMOVE_CAR_ERROR,
+    payload: error,
+  };
+}
+
+
+export function editCarRequest(token, user, data) {
+  return {
+    type: CarsTypes.EDIT_CAR_REQUEST,
+    payload: {
+      token,
+      user,
+      data
+    },
+  };
+}
+
+export function editCarSuccess(message) {
+  return {
+    type: CarsTypes.EDIT_CAR_SUCCESS,
+    payload: message
+  };
+}
+
+export function editCarError(error) {
+  return {
+    type: CarsTypes.EDIT_CAR_ERROR,
     payload: error,
   };
 }

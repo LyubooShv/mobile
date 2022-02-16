@@ -12,23 +12,18 @@ import LogIn from "../../containers/LogIn/LogIn";
 import Register from "../../containers/Register/Register";
 
 function App() {
-  // const userSessionInfo = useSelector((state) => state.userSession);
-  // const isUserLoggedIn = userSessionInfo.isLoggedIn;
+  const user = useSelector((state) => state.currentUser.currentUser);
 
-  // let windowLocation = window.location;
-  // let windowURL = windowLocation.pathname;
+  let windowLocation = window.location;
+  let windowURL = windowLocation.pathname;
 
   return (
     <div className="App">
       <CustomRedirect />
-      {/* {isUserLoggedIn && (windowURL === '/login' || windowURL === '/register') ? (
-        <Redirect to="/cars" />
-      ) : null} */}
+      {user && (windowURL === "/login" || windowURL === "/register") ? (
+        <Redirect to="/home" />
+      ) : null}
       <Switch>
-        {
-          // TODO: Set route-s
-          // 'home' is just for the example
-        }
         <Route exact path="/home" component={Home} />
         <Redirect push exact from="/" to="/login" />
         <Route exact path="/login" component={LogIn} />

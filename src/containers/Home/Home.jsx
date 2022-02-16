@@ -4,14 +4,17 @@ import { isEmpty } from "lodash";
 import MaterialTable from "material-table";
 import Header from "../../components/Header/Header";
 import { tableTitleColumns } from "../../common/tableTitleColumns";
-import { getCarsRequest, createCarRequest, removeCarRequest } from "./action";
+import {
+  getCarsRequest,
+  createCarRequest,
+  removeCarRequest,
+  editCarRequest,
+} from "./action";
 
 export default function Home() {
   const dispatch = useDispatch();
   const cars = useSelector((state) => state.cars.cars.data);
-  const { user, jwtToken } = useSelector(
-    (state) => state.currentUser.currentUser.data
-  );
+  const user = useSelector((state) => state.currentUser.currentUser);
 
   const [createdCar, setCreatedCar] = useState(cars);
 
@@ -31,38 +34,71 @@ export default function Home() {
           selection: true,
         }}
         editable={{
-          onRowAdd: (newData) =>
-            new Promise((resolve, reject) => {
-              setTimeout(() => {
-                resolve();
-                setCreatedCar((prevState) => {
-                  const cars = [...prevState, newData];
-                  dispatch(createCarRequest(jwtToken, newData, user));
-                  return cars;
-                });
-                console.log("addButton:", createdCar, newData);
-              }, 1000);
-            }),
-          onRowUpdate: (newData, oldData) =>
-            new Promise((resolve, reject) => {
-              setTimeout(() => {
-                console.log("editButton:");
-                resolve();
-              }, 1000);
-            }),
-          onRowDelete: (oldData) =>
-            new Promise((resolve, reject) => {
-              setTimeout(() => {
-                resolve();
-                setCreatedCar((prevState) => {
-                  const data = [...prevState];
-                  data.splice(data.indexOf(oldData), 1);
-                  dispatch(removeCarRequest(oldData.id, user.id, jwtToken));
-                  return data;
-                });
-                console.log("deleteButton:", user, jwtToken);
-              }, 1000);
-            }),
+          onRowAdd: user
+            ? (newData) =>
+                new Promise((resolve, reject) => {
+                  setTimeout(() => {
+                    resolve();
+                    setCreatedCar((prevState) => {
+                      const cars = [...prevState, newData];
+                      dispatch(
+                        createCarRequest(
+                          user.data.jwtToken,
+                          newData,
+                          user.data.user
+                        )
+                      );
+                      return cars;
+                    });
+                  }, 1000);
+                })
+            : null,
+          isEditHidden: user
+            ? (row) => row.user.username !== user.data.user.username
+            : null,
+          onRowUpdate: user
+            ? (newData, oldData) =>
+                new Promise((resolve, reject) => {
+                  setTimeout(() => {
+                    resolve();
+                    setCreatedCar((prevState) => {
+                      const data = [...prevState];
+                      data.splice(data.indexOf(oldData), 1, newData);
+                      dispatch(
+                        editCarRequest(
+                          user.data.jwtToken,
+                          user.data.user,
+                          newData
+                        )
+                      );
+                      return data;
+                    });
+                  }, 1000);
+                })
+            : null,
+          isDeleteHidden: user
+            ? (row) => row.user.username !== user.data.user.username
+            : null,
+          onRowDelete: user
+            ? (oldData) =>
+                new Promise((resolve, reject) => {
+                  setTimeout(() => {
+                    resolve();
+                    setCreatedCar((prevState) => {
+                      const data = [...prevState];
+                      data.splice(data.indexOf(oldData), 1);
+                      dispatch(
+                        removeCarRequest(
+                          oldData.id,
+                          user.data.user.id,
+                          user.data.jwtToken
+                        )
+                      );
+                      return data;
+                    });
+                  }, 1000);
+                })
+            : null,
         }}
       />
     </div>
