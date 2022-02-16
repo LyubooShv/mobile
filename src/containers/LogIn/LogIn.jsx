@@ -18,6 +18,7 @@ import {
 
 import { logInRequest } from "./action";
 import { inputValidation } from "./loginValidation/validation";
+import { redirect } from "../../components/CustomRedirect/actions";
 
 function Copyright(props) {
   return (
@@ -124,15 +125,23 @@ const LogIn = () => {
 
             <Grid container>
               <Grid item>
-                <Link className="signInOrUp" to={"/register"}>
+                <a
+                  href="#"
+                  className="signInOrUp"
+                  onClick={() => dispatch(redirect("/register"))}
+                >
                   Don't have an account? Go to Register.
-                </Link>
+                </a>
               </Grid>
 
               <Grid item>
-                <Link className="home" to="/home">
+                <a
+                  href="#"
+                  className="home"
+                  onClick={() => dispatch(redirect("/home"))}
+                >
                   Continue to catalog
-                </Link>
+                </a>
               </Grid>
             </Grid>
           </Box>

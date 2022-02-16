@@ -4,10 +4,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { logOutSuccess } from "../../containers/LogIn/action";
 import { redirect } from "../CustomRedirect/actions";
 
-const Header = (user) => {
-  const { username } = useSelector(
-    (state) => state.currentUser.currentUser.data.user
-  );
+const Header = () => {
+  const user = useSelector((state) => state.currentUser.currentUser);
   const dispatch = useDispatch();
 
   const logOut = () => {
@@ -17,8 +15,16 @@ const Header = (user) => {
   return (
     <div>
       <h2>Simple Cars</h2>
-      <Button onClick={logOut}>LogOut</Button>
-      <div>{username}</div>
+      {user ? (
+        <div>
+          <Button onClick={logOut}>LogOut</Button>
+          <div>{user.data.user.username}</div>
+        </div>
+      ) : (
+        <a href="#" onClick={() => dispatch(redirect("/login"))}>
+          Log In
+        </a>
+      )}
     </div>
   );
 };

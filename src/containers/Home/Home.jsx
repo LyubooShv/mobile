@@ -14,9 +14,7 @@ import {
 export default function Home() {
   const dispatch = useDispatch();
   const cars = useSelector((state) => state.cars.cars.data);
-  const { user, jwtToken } = useSelector(
-    (state) => state.currentUser.currentUser.data
-  );
+  const user = useSelector((state) => state.currentUser.currentUser);
 
   const [createdCar, setCreatedCar] = useState(cars);
 
@@ -36,43 +34,71 @@ export default function Home() {
           selection: true,
         }}
         editable={{
-          onRowAdd: (newData) =>
-            new Promise((resolve, reject) => {
-              setTimeout(() => {
-                resolve();
-                setCreatedCar((prevState) => {
-                  const cars = [...prevState, newData];
-                  dispatch(createCarRequest(jwtToken, newData, user));
-                  return cars;
-                });
-              }, 1000);
-            }),
-          isEditHidden: (row) => row.user.username !== user.username,
-          onRowUpdate: (newData, oldData) =>
-            new Promise((resolve, reject) => {
-              setTimeout(() => {
-                resolve();
-                setCreatedCar((prevState) => {
-                  const data = [...prevState];
-                  data.splice(data.indexOf(oldData), 1, newData);
-                  dispatch(editCarRequest(jwtToken, user, newData));
-                  return data;
-                });
-              }, 1000);
-            }),
-          isDeleteHidden: (row) => row.user.username !== user.username,
-          onRowDelete: (oldData) =>
-            new Promise((resolve, reject) => {
-              setTimeout(() => {
-                resolve();
-                setCreatedCar((prevState) => {
-                  const data = [...prevState];
-                  data.splice(data.indexOf(oldData), 1);
-                  dispatch(removeCarRequest(oldData.id, user.id, jwtToken));
-                  return data;
-                });
-              }, 1000);
-            }),
+          onRowAdd: user
+            ? (newData) =>
+                new Promise((resolve, reject) => {
+                  setTimeout(() => {
+                    resolve();
+                    setCreatedCar((prevState) => {
+                      const cars = [...prevState, newData];
+                      dispatch(
+                        createCarRequest(
+                          user.data.jwtToken,
+                          newData,
+                          user.data.user
+                        )
+                      );
+                      return cars;
+                    });
+                  }, 1000);
+                })
+            : null,
+          isEditHidden: user
+            ? (row) => row.user.username !== user.data.user.username
+            : null,
+          onRowUpdate: user
+            ? (newData, oldData) =>
+                new Promise((resolve, reject) => {
+                  setTimeout(() => {
+                    resolve();
+                    setCreatedCar((prevState) => {
+                      const data = [...prevState];
+                      data.splice(data.indexOf(oldData), 1, newData);
+                      dispatch(
+                        editCarRequest(
+                          user.data.jwtToken,
+                          user.data.user,
+                          newData
+                        )
+                      );
+                      return data;
+                    });
+                  }, 1000);
+                })
+            : null,
+          isDeleteHidden: user
+            ? (row) => row.user.username !== user.data.user.username
+            : null,
+          onRowDelete: user
+            ? (oldData) =>
+                new Promise((resolve, reject) => {
+                  setTimeout(() => {
+                    resolve();
+                    setCreatedCar((prevState) => {
+                      const data = [...prevState];
+                      data.splice(data.indexOf(oldData), 1);
+                      dispatch(
+                        removeCarRequest(
+                          oldData.id,
+                          user.data.user.id,
+                          user.data.jwtToken
+                        )
+                      );
+                      return data;
+                    });
+                  }, 1000);
+                })
+            : null,
         }}
       />
     </div>
