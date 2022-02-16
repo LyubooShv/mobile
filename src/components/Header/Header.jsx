@@ -18,7 +18,7 @@ const Header = (user) => {
     <div>
       <h2>Simple Cars</h2>
       <Button onClick={logOut}>LogOut</Button>
-      <div>{username && username}</div>
+      <div>{username}</div>
     </div>
   );
 };
