@@ -48,7 +48,7 @@ export default function Home() {
         columns={tableTitleColumns}
         data={orderArr()}
         options={{
-          selection: true,
+          selection: false,
           headerStyle: { backgroundColor: "wheat" },
           rowStyle: { backgroundColor: "wheat" },
         }}
