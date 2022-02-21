@@ -15,23 +15,42 @@ export default function Home() {
   const dispatch = useDispatch();
   const cars = useSelector((state) => state.cars.cars.data);
   const user = useSelector((state) => state.currentUser.currentUser);
+  const newCar = useSelector((state) => state.createdCar.createdCar);
 
   const [createdCar, setCreatedCar] = useState(cars);
+  const [newCarArr, setNewCarArr] = useState([]);
+  const [rowData, setRowData] = useState(0);
 
   useEffect(() => {
     isEmpty(cars) && dispatch(getCarsRequest());
-    setCreatedCar(cars);
-  }, [cars]);
+    isEmpty(createdCar) && setCreatedCar(cars);
+    newCar && setNewCarArr([...newCarArr, newCar]);
+  }, [cars, newCar]);
+
+  const orderArr = () => {
+    if (user && createdCar) {
+      const currentUserCars = createdCar.filter(
+        (e) => e.user.username === user.data.user.username
+      );
+      const notCurrentUserCars = createdCar.filter(
+        (e) => e.user.username !== user.data.user.username
+      );
+      const orderedArr = currentUserCars.concat(notCurrentUserCars);
+      return orderedArr;
+    }
+  };
 
   return (
     <div>
       <Header />
       <MaterialTable
-        title="Simple Cars"
+        title="Cars List"
         columns={tableTitleColumns}
-        data={createdCar}
+        data={orderArr()}
         options={{
           selection: true,
+          headerStyle: { backgroundColor: "wheat" },
+          rowStyle: { backgroundColor: "wheat" },
         }}
         editable={{
           onRowAdd: user
@@ -40,7 +59,12 @@ export default function Home() {
                   setTimeout(() => {
                     resolve();
                     setCreatedCar((prevState) => {
-                      const cars = [...prevState, newData];
+                      const data = {
+                        ...newData,
+                        user: user.data.user,
+                        rowData,
+                      };
+                      const cars = [data, ...prevState];
                       dispatch(
                         createCarRequest(
                           user.data.jwtToken,
@@ -48,6 +72,7 @@ export default function Home() {
                           user.data.user
                         )
                       );
+                      setRowData(rowData + 1);
                       return cars;
                     });
                   }, 1000);
@@ -63,12 +88,18 @@ export default function Home() {
                     resolve();
                     setCreatedCar((prevState) => {
                       const data = [...prevState];
-                      data.splice(data.indexOf(oldData), 1, newData);
+                      const dataWithNewId =
+                        !oldData.id &&
+                        oldData.rowData ===
+                          createdCar.indexOf(createdCar[oldData.rowData])
+                          ? { ...newData, id: newCarArr[oldData.rowData].id }
+                          : { ...newData };
+                      data.splice(data.indexOf(oldData), 1, dataWithNewId);
                       dispatch(
                         editCarRequest(
                           user.data.jwtToken,
                           user.data.user,
-                          newData
+                          dataWithNewId
                         )
                       );
                       return data;
@@ -86,10 +117,16 @@ export default function Home() {
                     resolve();
                     setCreatedCar((prevState) => {
                       const data = [...prevState];
+                      const dataWithNewId =
+                        !oldData.id &&
+                        oldData.rowData ===
+                          createdCar.indexOf(createdCar[oldData.rowData])
+                          ? { ...oldData, id: newCarArr[oldData.rowData].id }
+                          : { ...oldData };
                       data.splice(data.indexOf(oldData), 1);
                       dispatch(
                         removeCarRequest(
-                          oldData.id,
+                          dataWithNewId.id,
                           user.data.user.id,
                           user.data.jwtToken
                         )

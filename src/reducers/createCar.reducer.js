@@ -9,7 +9,7 @@ function createCarReducer(state = initialState, action) {
     case CarsTypes.CREATE_CAR_SUCCESS:
       return {
         ...state,
-        error: "",
+        createdCar: action.payload,
       };
 
     case CarsTypes.CREATE_CAR_ERROR:

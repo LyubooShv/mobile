@@ -33,9 +33,8 @@ export function createCarRequest(
 export function createCarSuccess(createdCar) {
   return {
     type: CarsTypes.CREATE_CAR_SUCCESS,
-    payload: {
-      createdCar,
-    },
+    payload: createdCar,
+
   };
 }
 

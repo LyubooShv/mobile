@@ -11,7 +11,8 @@ import storage from 'redux-persist/lib/storage';
 const blacklistPaths = [
   'redirect',
   'cars',
-  'currentUser.error'
+  'currentUser.error',
+  "createdCar"
 ]
 
 const persistConfig = {
